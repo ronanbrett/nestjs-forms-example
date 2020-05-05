@@ -1,0 +1,42 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+  <!-- sourceAccountId Column -->
+  <ng-container matColumnDef="sourceAccountId">
+    <th mat-header-cell *matHeaderCellDef>sourceAccountId</th>
+    <td mat-cell *matCellDef="let element">{{ element.sourceAccountId }}</td>
+  </ng-container>
+
+  <!-- accountName Column -->
+  <ng-container matColumnDef="accountName">
+    <th mat-header-cell *matHeaderCellDef>accountName</th>
+    <td mat-cell *matCellDef="let element">{{ element.accountName }}</td>
+  </ng-container>
+
+  <!-- accountType Column -->
+  <ng-container matColumnDef="accountType">
+    <th mat-header-cell *matHeaderCellDef>accountType</th>
+    <td mat-cell *matCellDef="let element">{{ element.accountType }}</td>
+  </ng-container>
+
+  <!-- accountCreatedDate Column -->
+  <ng-container matColumnDef="accountCreatedDate">
+    <th mat-header-cell *matHeaderCellDef>accountCreatedDate</th>
+    <td mat-cell *matCellDef="let element">{{ element.accountCreatedDate }}</td>
+  </ng-container>
+
+  <!-- privateMarket Column -->
+  <ng-container matColumnDef="privateMarket">
+    <th mat-header-cell *matHeaderCellDef>privateMarket</th>
+    <td mat-cell *matCellDef="let element">{{ element.privateMarket }}</td>
+  </ng-container>
+
+  <!-- privateMarketSubtype Column -->
+  <ng-container matColumnDef="privateMarketSubtype">
+    <th mat-header-cell *matHeaderCellDef>privateMarketSubtype</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.privateMarketSubType }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

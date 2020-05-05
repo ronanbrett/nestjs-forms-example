@@ -1,0 +1,34 @@
+query getAllAccounts {
+  accounts {
+    id
+    accountName
+    accountType
+    accountCreatedDate
+    sourceAccountId
+    privateMarket
+    privateMarketSubType
+  }
+}
+
+mutation createNewAccount($accountInput: CreateAccountInputDTO!) {
+  createAccount(accountInput: $accountInput) {
+    id
+    accountName
+    accountType
+    accountCreatedDate
+    sourceAccountId
+    privateMarket
+    privateMarketSubType
+  }
+}
+
+subscription accountAddedSubscription {
+  accountAdded {
+    accountName
+    accountType
+    accountCreatedDate
+    privateMarket
+    sourceAccountId
+    privateMarketSubType
+  }
+}

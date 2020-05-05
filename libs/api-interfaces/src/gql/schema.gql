@@ -1,0 +1,85 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Account {
+  id: ID!
+  accountName: String!
+  sourceAccountId: String!
+  accountType: AccountType!
+  accountCreatedDate: DateTime!
+  privateMarket: Boolean
+  privateMarketSubType: PrivateMarketSubtype
+}
+
+enum AccountType {
+  ACCOUNT
+  GROUP_ACCOUNT
+  FUND
+  ENTITY
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum PrivateMarketSubtype {
+  LSA
+  LTD
+}
+
+type TemplateOptions {
+  label: String
+  placeholder: String
+  type: String
+  required: Boolean
+  description: String
+  options: [JSON!]
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type FormField {
+  key: ID!
+  type: FIELD_TYPES!
+  templateOptions: TemplateOptions!
+  expressionProperties: JSON
+  hideExpression: String
+  fieldSet: FormField
+}
+
+enum FIELD_TYPES {
+  input
+  datepicker
+  autocomplete
+  select
+  toggle
+  radio
+}
+
+type Query {
+  account(id: String): Account!
+  accounts(accountId: String, accountName: String, startDate: DateTime, endDate: DateTime, accountType: AccountType): [Account!]!
+  fields: [FormField!]!
+}
+
+type Mutation {
+  createAccount(accountInput: CreateAccountInputDTO!): Account!
+}
+
+input CreateAccountInputDTO {
+  accountName: String
+  sourceAccountId: String
+  accountType: AccountType!
+  accountCreatedDate: DateTime!
+  privateMarket: Boolean
+  privateMarketSubType: PrivateMarketSubtype
+}
+
+type Subscription {
+  accountAdded: Account!
+}

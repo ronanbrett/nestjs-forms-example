@@ -1,0 +1,23 @@
+/*
+ * Remove template code below
+ */
+:host {
+  display: block;
+  font-family: sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 50px 50px;
+
+  formly-form {
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+  }
+
+  ::ng-deep formly-field {
+    margin-top: 12px;
+  }
+}

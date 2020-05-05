@@ -1,0 +1,20 @@
+query getAllFields {
+  fields {
+    key
+    type
+    hideExpression
+    templateOptions {
+      label
+      placeholder
+      description
+      options
+      required
+    }
+    fieldSet {
+      key
+      templateOptions {
+        label
+      }
+    }
+  }
+}
