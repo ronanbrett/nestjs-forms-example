@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./tools/docker/angular.Dockerfile
+    ports:
+      - '4111:80'
+    depends_on:
+      - api
+      - mongodb
+  api:
+    build:
+      context: .
+      dockerfile: ./tools/docker/node.Dockerfile
+    ports:
+      - '3333:3333'
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGODB_DATABASE="nest"

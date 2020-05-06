@@ -8,9 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { split, concat } from 'apollo-link';
 import { OperationDefinitionNode } from 'graphql';
 import { onError } from 'apollo-link-error';
-
-const uri = 'http://localhost:3333/graphql'; // <-- add the URL of the GraphQL server here
-const wsUrl = 'ws://localhost:3333/graphql';
+import { environment } from '../../environments/environment';
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward, response }) => {
@@ -34,12 +32,12 @@ const errorLink = onError(
 
 export function createApollo(httpLink: HttpLink) {
   const http = httpLink.create({
-    uri
+    uri: environment.api.uri
   });
 
   // Create a WebSocket link:
   const ws = new WebSocketLink({
-    uri: wsUrl,
+    uri: environment.api.wsUrl,
     options: {
       reconnect: true
     }

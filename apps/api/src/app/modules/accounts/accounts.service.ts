@@ -1,11 +1,11 @@
 import { AccountType } from '@form-test/api-interfaces';
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Connection, connection } from 'mongoose';
 import { GetAccountsArgsDTO } from './dto/getAccountsArgs.dto';
 import { CreateAccountInputDTO } from './dto/createAccountInput.dto';
 import { Account, AccountModel } from './models/account.model';
 import { reduce } from 'lodash';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 
 @Injectable()
 export class AccountsService {
@@ -14,8 +14,26 @@ export class AccountsService {
   ) {}
 
   async create(accountInput: CreateAccountInputDTO): Promise<Account> {
-    const newAccount = await this.accountModel.create(accountInput);
-    return newAccount as Account;
+    try {
+      const session = await this.accountModel.db.startSession();
+
+      try {
+        await session.startTransaction();
+
+        const newAccount = await this.accountModel.create(accountInput);
+
+        await session.commitTransaction();
+        return newAccount as Account;
+      } catch (err) {
+        await session.abortTransaction();
+        console.log(err);
+      } finally {
+        await session.endSession();
+      }
+    } catch (error) {
+      console.log(error);
+      console.log("Transaction couldn't create");
+    }
   }
 
   async findAll(accountArgs: Partial<GetAccountsArgsDTO>): Promise<Account[]> {
