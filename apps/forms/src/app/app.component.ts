@@ -9,6 +9,7 @@ import {
   getAllAccountsGQL,
   getAllFieldsGQL
 } from './api/api';
+import { QueueService } from './services/queue.service';
 
 @Component({
   selector: 'form-test-root',
@@ -16,44 +17,13 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  form = new FormGroup({});
-  model = {};
-  fields: FormlyFieldConfig[] = [];
+  constructor(private queueService: QueueService) {}
 
-  constructor(
-    private getAllFieldsQuery: getAllFieldsGQL,
-    private createNewAccount: createNewAccountGQL,
-    private snackBar: MatSnackBar
-  ) {
-    this.getAllFieldsQuery
-      .watch()
-      .valueChanges.subscribe(({ data: { fields } }) => {
-        this.fields = fields;
-      });
+  ngOnInit() {
+    this.startBatching();
   }
 
-  ngOnInit() {}
-
-  onSubmit() {
-    this.createNewAccount
-      .mutate({
-        accountInput: this.form.value
-      })
-      .pipe(
-        take(1),
-        switchMap(x => {
-          if (x?.errors?.length) {
-            return throwError(x.errors[0]);
-          }
-
-          return EMPTY;
-        }),
-        catchError(err => {
-          const { message } = err.message;
-          this.snackBar.open(`${message}`);
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  async startBatching() {
+    await this.queueService.startBatch();
   }
 }

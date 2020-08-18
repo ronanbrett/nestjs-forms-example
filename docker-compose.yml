@@ -1,19 +1,19 @@
 version: '3.7'
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: ./tools/docker/angular.Dockerfile
-    ports:
-      - '4111:80'
-    depends_on:
-      - api
-      - mongodb
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: ./tools/docker/angular-nobuild.Dockerfile
+  #   ports:
+  #     - '4111:80'
+  #   depends_on:
+  #     - api
+  #     - mongodb
   api:
     build:
       context: .
-      dockerfile: ./tools/docker/node.Dockerfile
+      dockerfile: ./tools/docker/node-nobuild.Dockerfile
     ports:
       - '3333:3333'
     depends_on:

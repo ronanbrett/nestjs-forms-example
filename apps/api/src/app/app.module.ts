@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AccountsModule } from './modules/accounts/accounts.module';
 import { FormFieldsModule } from './modules/form-fields/form-fields.module';
 import { environment } from '../environments/environment';
+import { TestModule } from './modules/test/test.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { environment } from '../environments/environment';
       useUnifiedTopology: true,
       useNewUrlParser: true
     }),
+    TestModule,
     AccountsModule,
     FormFieldsModule,
     GraphQLModule.forRoot({
