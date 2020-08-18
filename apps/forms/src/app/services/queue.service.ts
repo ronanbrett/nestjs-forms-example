@@ -22,6 +22,7 @@ import { reduce } from 'lodash';
 
 import { random } from 'faker';
 import { HttpClient } from '@angular/common/http';
+import { accountAddedSubscriptionGQL } from '../api/api';
 
 let count = 0;
 
@@ -72,16 +73,20 @@ export class QueueService {
 
     this.validationQueue
       .pipe(
-        concatMap(x => {
+        mergeMap(x => {
           return of(this.getDataSpliced(x));
         }),
 
         tap(x => console.log(x)),
 
         map(records => {
+          console.log(records);
           if (records.length === 0) {
             this.validationQueue.complete();
+            return [];
           }
+
+          this.validationQueue.next(this.CUR_OFFSET);
 
           return records;
         }),
@@ -89,7 +94,7 @@ export class QueueService {
         mergeMap(
           records =>
             this.validateSecurity(records).pipe(
-              // retryWhen(errors => errors.pipe(delay(1000), take(10))),
+              retryWhen(errors => errors.pipe(delay(1000), take(10))),
               catchError((err, caught) => {
                 console.log(err, caught);
                 records.map(x => (x.valid = false));
@@ -98,6 +103,29 @@ export class QueueService {
             ),
           5
         ),
+
+        // scan(
+        //   (acc, val) => {
+        //     acc.totalProcessed += val.length;
+        //     acc.records = val;
+
+        //     let queueSize = acc.totalProcessed - acc.offset;
+
+        //     console.log(queueSize, acc.totalProcessed, acc.offset);
+
+        //     while (queueSize <= options.maxQueueSize) {
+        //       acc.offset += this.CUR_OFFSET;
+        //       this.validationQueue.next(this.CUR_OFFSET);
+        //     }
+
+        //     return acc;
+        //   },
+        //   {
+        //     offset: 0,
+        //     totalProcessed: 0,
+        //     records: []
+        //   }
+        // ),
 
         scan(
           (acc, val: any[], index: number) => {
